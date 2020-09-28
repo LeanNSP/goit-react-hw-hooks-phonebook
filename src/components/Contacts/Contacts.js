@@ -7,7 +7,7 @@ import Spinner from "react-spinner-material";
 import styles from "./Contacts.module.css";
 import "./animationContacts.css";
 
-const Contacts = ({ contacts, theme, isLoadingContact, children }) => {
+const Contacts = ({ contacts, isLoadingContact, theme, children }) => {
   const spinnerColor =
     theme === "light" ? "rgb(180, 180, 180)" : "rgb(255, 255, 210)";
   const titleClass = theme === "light" ? styles.title_light : styles.title_dark;

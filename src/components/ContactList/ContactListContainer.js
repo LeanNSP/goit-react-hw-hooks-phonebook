@@ -1,13 +1,12 @@
-import { connect } from "react-redux";
+import React from "react";
+import { useSelector } from "react-redux";
 
 import ContactList from "./ContactList";
 
 import { contactsSelectors } from "../../redux/contacts";
 
-const mapStateToProps = (state) => {
-  return {
-    contacts: contactsSelectors.getVisibleContacts(state),
-  };
-};
+export default function ContactListContainer() {
+  const contacts = useSelector(contactsSelectors.getVisibleContacts);
 
-export default connect(mapStateToProps)(ContactList);
+  return <ContactList contacts={contacts} />;
+}

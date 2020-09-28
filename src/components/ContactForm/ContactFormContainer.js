@@ -1,6 +1,5 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import PropTypes from "prop-types";
+import React, { useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
 
 import ContactForm from "./ContactForm";
 
@@ -8,87 +7,49 @@ import { errorAction } from "../../redux/error";
 import { contactsOperations, contactsSelectors } from "../../redux/contacts";
 import { themeSelectors } from "../../redux/theme";
 
-const INITIAL_STATE = { name: "", number: "" };
+export default function ContactFormContainer() {
+  const [name, setName] = useState("");
+  const updName = (target) => setName(target.value);
 
-class ContactFormContainer extends Component {
-  static propTypes = {
-    contacts: PropTypes.arrayOf(
-      PropTypes.exact({
-        id: PropTypes.string.isRequired,
-        name: PropTypes.string.isRequired,
-        number: PropTypes.string.isRequired,
-      })
-    ).isRequired,
-    theme: PropTypes.string.isRequired,
-    onAddContact: PropTypes.func.isRequired,
-    onOpenNotifyError: PropTypes.func.isRequired,
+  const [number, setNumber] = useState("");
+  const updNumber = (target) => setNumber(target.value);
+
+  const contacts = useSelector(contactsSelectors.getContacts);
+  const theme = useSelector(themeSelectors.getTheme);
+
+  const dispatch = useDispatch();
+
+  const handleSubmit = (evt) => {
+    evt.preventDefault();
+
+    const newContact = { name, number };
+
+    isSuchContact()
+      ? dispatch(errorAction.openNotifyError(`${name} is already in contacts!`))
+      : contactsOperations.addContact(newContact, dispatch);
+
+    clearForm();
   };
 
-  state = { ...INITIAL_STATE };
-
-  formInputsChangeHandler = ({ name, value }) => {
-    this.setState({ [name]: value });
-  };
-
-  submitHandler = (e) => {
-    e.preventDefault();
-
-    const { onAddContact, onOpenNotifyError } = this.props;
-    const { name } = this.state;
-    const newContact = this.createContact();
-
-    this.isSuchContact()
-      ? onOpenNotifyError(`${name} is already in contacts!`)
-      : onAddContact(newContact);
-
-    this.clearForm();
-  };
-
-  createContact() {
-    const { name, number } = this.state;
-    return {
-      name,
-      number,
-    };
-  }
-
-  isSuchContact = () => {
-    return this.props.contacts.find(
-      ({ name }) => name.toLowerCase() === this.state.name.toLowerCase()
+  const isSuchContact = () => {
+    return contacts.find(
+      (contact) => contact.name.toLowerCase() === name.toLowerCase()
     );
   };
 
-  clearForm = () => {
-    this.setState({ ...INITIAL_STATE });
+  const clearForm = () => {
+    setName("");
+    setNumber("");
   };
 
-  render() {
-    const { theme } = this.props;
-
-    return (
-      <ContactForm
-        {...this.state}
-        theme={theme}
-        onSubmit={this.submitHandler}
-        onChange={this.formInputsChangeHandler}
-      />
-    );
-  }
+  return (
+    <ContactForm
+      name={name}
+      number={number}
+      theme={theme}
+      onSubmit={handleSubmit}
+      onNameChange={updName}
+      onNumberChange={updNumber}
+    />
+  );
 }
-
-const mapStateToProps = (state) => {
-  return {
-    contacts: contactsSelectors.getContacts(state),
-    theme: themeSelectors.getTheme(state),
-  };
-};
-
-const mapDispatchToProps = {
-  onAddContact: contactsOperations.addContact,
-  onOpenNotifyError: errorAction.openNotifyError,
-};
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(ContactFormContainer);

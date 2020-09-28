@@ -5,7 +5,14 @@ import { CSSTransition } from "react-transition-group";
 import styles from "./ContactForm.module.css";
 import "./animationContactForm.css";
 
-const ContactForm = ({ name, number, theme, onSubmit, onChange }) => {
+const ContactForm = ({
+  name,
+  number,
+  theme,
+  onSubmit,
+  onNameChange,
+  onNumberChange,
+}) => {
   const labelClass = theme === "light" ? styles.label_light : styles.label_dark;
   const inputClass = theme === "light" ? styles.input_light : styles.input_dark;
   const initBtnClasses = [styles.button];
@@ -35,7 +42,7 @@ const ContactForm = ({ name, number, theme, onSubmit, onChange }) => {
                   name="name"
                   required
                   value={name}
-                  onChange={({ target }) => onChange(target)}
+                  onChange={({ target }) => onNameChange(target)}
                 />
               </label>
               <label className={labelClass}>
@@ -48,7 +55,7 @@ const ContactForm = ({ name, number, theme, onSubmit, onChange }) => {
                   pattern="[0-9]{3}-[0-9]{2}-[0-9]{2}"
                   required
                   value={number}
-                  onChange={({ target }) => onChange(target)}
+                  onChange={({ target }) => onNumberChange(target)}
                 />
                 <small className={styles.small}>*Format: 123-45-67</small>
               </label>
@@ -76,7 +83,8 @@ ContactForm.propTypes = {
   number: PropTypes.string.isRequired,
   theme: PropTypes.string.isRequired,
   onSubmit: PropTypes.func.isRequired,
-  onChange: PropTypes.func.isRequired,
+  onNameChange: PropTypes.func.isRequired,
+  onNumberChange: PropTypes.func.isRequired,
 };
 
 export default ContactForm;

@@ -1,58 +1,43 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import PropTypes from "prop-types";
+import React, { useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
 
 import LoginForm from "./LoginForm";
 
 import { authOperation } from "../../redux/auth";
 import { themeSelectors } from "../../redux/theme";
 
-const INITIAL_STATE = { email: "", password: "" };
+export default function LoginFormContainer() {
+  const [email, setEmail] = useState("");
+  const updEmail = ({ value }) => setEmail(value);
 
-class LoginFormContainer extends Component {
-  static propTypes = {
-    theme: PropTypes.string.isRequired,
-    onLogin: PropTypes.func.isRequired,
+  const [password, setPassword] = useState("");
+  const updPassword = ({ value }) => setPassword(value);
+
+  const theme = useSelector(themeSelectors.getTheme);
+
+  const dispatch = useDispatch();
+
+  const handlerSubmit = (evt) => {
+    evt.preventDefault();
+
+    authOperation.logIn({ email, password }, dispatch);
+
+    clearForm();
   };
 
-  state = { ...INITIAL_STATE };
-
-  formInputsChangeHandler = ({ name, value }) => {
-    this.setState({ [name]: value });
+  const clearForm = () => {
+    setEmail("");
+    setPassword("");
   };
 
-  submitHandler = (e) => {
-    e.preventDefault();
-
-    this.props.onLogin({ ...this.state });
-
-    this.clearForm();
-  };
-
-  clearForm = () => {
-    this.setState({ ...INITIAL_STATE });
-  };
-
-  render() {
-    const { theme } = this.props;
-
-    return (
-      <LoginForm
-        {...this.state}
-        theme={theme}
-        onSubmit={this.submitHandler}
-        onChange={this.formInputsChangeHandler}
-      />
-    );
-  }
+  return (
+    <LoginForm
+      email={email}
+      password={password}
+      theme={theme}
+      onSubmit={handlerSubmit}
+      onEmailChange={updEmail}
+      onPasswordChange={updPassword}
+    />
+  );
 }
-
-const mapStateToProps = (state) => {
-  return {
-    theme: themeSelectors.getTheme(state),
-  };
-};
-
-export default connect(mapStateToProps, { onLogin: authOperation.logIn })(
-  LoginFormContainer
-);

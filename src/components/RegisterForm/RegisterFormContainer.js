@@ -1,58 +1,49 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import PropTypes from "prop-types";
+import React, { useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
 
 import RegisterForm from "./RegisterForm";
 
 import { authOperation } from "../../redux/auth";
 import { themeSelectors } from "../../redux/theme";
 
-const INITIAL_STATE = { name: "", email: "", password: "" };
+export default function RegisterPage() {
+  const [name, setName] = useState("");
+  const updName = ({ value }) => setName(value);
 
-class RegisterPage extends Component {
-  static propTypes = {
-    theme: PropTypes.string.isRequired,
-    onRegister: PropTypes.func.isRequired,
+  const [email, setEmail] = useState("");
+  const updEmail = ({ value }) => setEmail(value);
+
+  const [password, setPassword] = useState("");
+  const updPassword = ({ value }) => setPassword(value);
+
+  const theme = useSelector(themeSelectors.getTheme);
+
+  const dispatch = useDispatch();
+
+  const handlerSubmit = (evt) => {
+    evt.preventDefault();
+
+    authOperation.register({ name, email, password }, dispatch);
+
+    clearForm();
   };
 
-  state = { ...INITIAL_STATE };
-
-  formInputsChangeHandler = ({ name, value }) => {
-    this.setState({ [name]: value });
+  const clearForm = () => {
+    setName("");
+    setEmail("");
+    setPassword("");
   };
 
-  submitHandler = (e) => {
-    e.preventDefault();
-
-    this.props.onRegister({ ...this.state });
-
-    this.clearForm();
-  };
-
-  clearForm = () => {
-    this.setState({ ...INITIAL_STATE });
-  };
-
-  render() {
-    const { theme } = this.props;
-
-    return (
-      <RegisterForm
-        {...this.state}
-        theme={theme}
-        onSubmit={this.submitHandler}
-        onChange={this.formInputsChangeHandler}
-      />
-    );
-  }
+  return (
+    <RegisterForm
+      name={name}
+      email={email}
+      password={password}
+      theme={theme}
+      onSubmit={handlerSubmit}
+      onNameChange={updName}
+      onEmailChange={updEmail}
+      onPasswordChange={updPassword}
+    />
+  );
 }
-
-const mapStateToProps = (state) => {
-  return {
-    theme: themeSelectors.getTheme(state),
-  };
-};
-
-export default connect(mapStateToProps, { onRegister: authOperation.register })(
-  RegisterPage
-);
