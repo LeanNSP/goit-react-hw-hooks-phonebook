@@ -14,7 +14,7 @@ const addContact = async (contact, dispatch) => {
   }
 };
 
-const fetchContacts = () => async (dispatch) => {
+const fetchContacts = async (dispatch) => {
   dispatch(contactsActions.fetchContactsRequest());
 
   try {
@@ -26,7 +26,7 @@ const fetchContacts = () => async (dispatch) => {
   }
 };
 
-const removeContact = (id) => async (dispatch) => {
+const removeContact = async (id, dispatch) => {
   dispatch(contactsActions.removeContactRequest());
 
   try {

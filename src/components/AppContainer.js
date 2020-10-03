@@ -1,37 +1,19 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import PropTypes from "prop-types";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 import App from "./App";
 
 import { themeSelectors } from "../redux/theme";
-import { authOperation } from "../redux/auth";
+import { authOperation, authSelectors } from "../redux/auth";
 
-class AppContainer extends Component {
-  static propTypes = {
-    theme: PropTypes.string.isRequired,
-    onGetCurrentUser: PropTypes.func.isRequired,
-  };
+export default function AppContainer() {
+  const theme = useSelector(themeSelectors.getTheme);
+  const token = useSelector(authSelectors.isAuthenticated);
+  const dispatch = useDispatch();
 
-  componentDidMount() {
-    this.props.onGetCurrentUser();
-  }
+  useEffect(() => {
+    authOperation.getCurrentUser(dispatch, token);
+  }, [dispatch, token]);
 
-  render() {
-    const { theme } = this.props;
-
-    return <App theme={theme} />;
-  }
+  return <App theme={theme} />;
 }
-
-const mapStateToProps = (state) => {
-  return {
-    theme: themeSelectors.getTheme(state),
-  };
-};
-
-const mapDispatchToProps = {
-  onGetCurrentUser: authOperation.getCurrentUser,
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(AppContainer);

@@ -1,17 +1,14 @@
-import { connect } from "react-redux";
+import React from "react";
+import { useSelector } from "react-redux";
 
 import UserMenu from "./UserMenu";
 
-import { authSelectors, authOperation } from "../../redux/auth";
+import { authSelectors } from "../../redux/auth";
 import { themeSelectors } from "../../redux/theme";
 
-const mapStateToProps = (state) => {
-  return {
-    name: authSelectors.getUserName(state),
-    theme: themeSelectors.getTheme(state),
-  };
-};
+export default function UserMenuContainer() {
+  const name = useSelector(authSelectors.getUserName);
+  const theme = useSelector(themeSelectors.getTheme);
 
-export default connect(mapStateToProps, { onLogout: authOperation.logOut })(
-  UserMenu
-);
+  return <UserMenu name={name} theme={theme} />;
+}

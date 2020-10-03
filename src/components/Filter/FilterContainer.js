@@ -1,20 +1,15 @@
-import { connect } from "react-redux";
+import React from "react";
+import { useSelector } from "react-redux";
 
 import Filter from "./Filter";
 
-import { contactsActions, contactsSelectors } from "../../redux/contacts";
+import { contactsSelectors } from "../../redux/contacts";
 import { themeSelectors } from "../../redux/theme";
 
-const mapStateToProps = (state) => {
-  return {
-    contacts: contactsSelectors.getContacts(state),
-    filter: contactsSelectors.getFilter(state),
-    theme: themeSelectors.getTheme(state),
-  };
-};
+export default function FilterContainer() {
+  const contacts = useSelector(contactsSelectors.getContacts);
+  const filter = useSelector(contactsSelectors.getFilter);
+  const theme = useSelector(themeSelectors.getTheme);
 
-const mapDispatchToProps = {
-  onChange: contactsActions.filterInputsChangeHandler,
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(Filter);
+  return <Filter contacts={contacts} filter={filter} theme={theme} />;
+}

@@ -28,7 +28,7 @@ const logIn = async (credentials, dispatch) => {
   }
 };
 
-const logOut = () => async (dispatch) => {
+const logOut = async (dispatch) => {
   dispatch(authActions.logoutRequest());
 
   try {
@@ -41,11 +41,7 @@ const logOut = () => async (dispatch) => {
   }
 };
 
-const getCurrentUser = () => async (dispatch, getState) => {
-  const {
-    auth: { token: persistedToken },
-  } = getState();
-
+const getCurrentUser = async (dispatch, persistedToken) => {
   if (persistedToken) {
     tokenToHeader.set(persistedToken);
     dispatch(authActions.getCurrentUserRequest());

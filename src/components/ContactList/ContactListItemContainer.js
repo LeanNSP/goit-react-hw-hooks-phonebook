@@ -1,17 +1,16 @@
-import { connect } from "react-redux";
+import React from "react";
+import { useSelector } from "react-redux";
 
 import ContactListItem from "./ContactListItem";
 
-import { contactsOperations, contactsSelectors } from "../../redux/contacts";
+import { contactsSelectors } from "../../redux/contacts";
 import { themeSelectors } from "../../redux/theme";
 
-const mapStateToProps = (state, ownProps) => {
-  const item = contactsSelectors.getContactById(state, ownProps.id);
-  return { ...item, theme: themeSelectors.getTheme(state) };
-};
+export default function ContactListItemContainer({ id, onRemove }) {
+  const contacts = useSelector(contactsSelectors.getContacts);
+  const item = contacts.find((item) => item.id === id);
 
-const mapDispatchToProps = (dispatch, ownProps) => ({
-  onRemove: () => dispatch(contactsOperations.removeContact(ownProps.id)),
-});
+  const theme = useSelector(themeSelectors.getTheme);
 
-export default connect(mapStateToProps, mapDispatchToProps)(ContactListItem);
+  return <ContactListItem {...item} theme={theme} onRemove={onRemove} />;
+}

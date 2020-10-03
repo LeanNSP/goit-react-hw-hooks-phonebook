@@ -1,17 +1,12 @@
-import { connect } from "react-redux";
+import React from "react";
+import { useSelector } from "react-redux";
 
 import Switch from "./Switch";
 
-import { themeActions, themeSelectors } from "../../redux/theme";
+import { themeSelectors } from "../../redux/theme";
 
-const mapStateToProps = (state) => {
-  return {
-    theme: themeSelectors.getTheme(state),
-  };
-};
+export default function SwitchContainer() {
+  const theme = useSelector(themeSelectors.getTheme);
 
-const mapDispatchToProps = {
-  onToggleTheme: themeActions.toggleTheme,
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(Switch);
+  return <Switch theme={theme} />;
+}

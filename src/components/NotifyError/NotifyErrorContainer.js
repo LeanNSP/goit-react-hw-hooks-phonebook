@@ -1,18 +1,12 @@
-import { connect } from "react-redux";
+import React from "react";
+import { useSelector } from "react-redux";
 
 import NotifyError from "./NotifyError";
 
-import { errorAction } from "../../redux/error";
 import { themeSelectors } from "../../redux/theme";
 
-const mapStateToProps = (state) => {
-  return {
-    theme: themeSelectors.getTheme(state),
-  };
-};
+export default function NotifyErrorContainer({ isError }) {
+  const theme = useSelector(themeSelectors.getTheme);
 
-const mapDispatchToProps = {
-  onClose: errorAction.closeNotifyError,
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(NotifyError);
+  return <NotifyError theme={theme} isError={isError} />;
+}

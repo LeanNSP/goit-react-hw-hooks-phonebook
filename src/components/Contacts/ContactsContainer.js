@@ -1,16 +1,23 @@
-import { connect } from "react-redux";
+import React from "react";
+import { useSelector } from "react-redux";
 
 import Contacts from "./Contacts";
 
 import { contactsSelectors } from "../../redux/contacts";
 import { themeSelectors } from "../../redux/theme";
 
-const mapStateToProps = (state) => {
-  return {
-    contacts: contactsSelectors.getContacts(state),
-    theme: themeSelectors.getTheme(state),
-    isLoadingContact: contactsSelectors.getLoadingContact(state),
-  };
-};
+export default function ContactsContainer({ children }) {
+  const contacts = useSelector(contactsSelectors.getContacts);
+  const theme = useSelector(themeSelectors.getTheme);
+  const isLoadingContact = useSelector(contactsSelectors.getLoadingContact);
 
-export default connect(mapStateToProps)(Contacts);
+  return (
+    <Contacts
+      contacts={contacts}
+      theme={theme}
+      isLoadingContact={isLoadingContact}
+    >
+      {children}
+    </Contacts>
+  );
+}

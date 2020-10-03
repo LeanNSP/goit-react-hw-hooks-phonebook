@@ -1,13 +1,12 @@
-import { connect } from "react-redux";
+import React from "react";
+import { useSelector } from "react-redux";
 
 import PositionedSpinner from "./PositionedSpinner";
 
 import { themeSelectors } from "../../redux/theme";
 
-const mapStateToProps = (state) => {
-  return {
-    theme: themeSelectors.getTheme(state),
-  };
-};
+export default function PositionedSpinnerContainer() {
+  const theme = useSelector(themeSelectors.getTheme);
 
-export default connect(mapStateToProps)(PositionedSpinner);
+  return <PositionedSpinner theme={theme} />;
+}

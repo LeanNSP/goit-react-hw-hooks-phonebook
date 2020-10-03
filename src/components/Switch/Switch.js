@@ -1,13 +1,18 @@
 import React from "react";
+import { useDispatch } from "react-redux";
 import PropTypes from "prop-types";
+
+import { themeActions } from "../../redux/theme";
 
 import styles from "./Switch.module.css";
 
-const Switch = ({ theme, onToggleTheme }) => {
+const Switch = ({ theme }) => {
   const iconClass = theme === "light" ? styles.icon_light : styles.icon_dark;
   const labelClass = theme === "light" ? styles.label_light : styles.label_dark;
   const markerClass =
     theme === "light" ? styles.marker_light : styles.marker_dark;
+
+  const dispatch = useDispatch();
 
   return (
     <div className={styles.switch}>
@@ -20,7 +25,7 @@ const Switch = ({ theme, onToggleTheme }) => {
 
       <div
         className={styles.custom_switch}
-        onClick={() => onToggleTheme(theme)}
+        onClick={() => dispatch(themeActions.toggleTheme(theme))}
       >
         <div className={labelClass} theme={theme} />
         <div className={markerClass} theme={theme} />

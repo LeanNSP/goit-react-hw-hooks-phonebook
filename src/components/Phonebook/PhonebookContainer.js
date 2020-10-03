@@ -1,15 +1,18 @@
-import { connect } from "react-redux";
+import React from "react";
+import { useSelector } from "react-redux";
 
 import Phonebook from "./Phonebook";
 
 import { themeSelectors } from "../../redux/theme";
 import { errorSelectors } from "../../redux/error";
 
-const mapStateToProps = (state) => {
-  return {
-    theme: themeSelectors.getTheme(state),
-    isError: errorSelectors.getError(state),
-  };
-};
+export default function PhonebookContainer({ children }) {
+  const theme = useSelector(themeSelectors.getTheme);
+  const isError = useSelector(errorSelectors.getError);
 
-export default connect(mapStateToProps)(Phonebook);
+  return (
+    <Phonebook theme={theme} isError={isError}>
+      {children}
+    </Phonebook>
+  );
+}

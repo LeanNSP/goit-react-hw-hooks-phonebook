@@ -1,40 +1,18 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import PropTypes from "prop-types";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 import ContactPage from "./ContactPage";
 
 import { authSelectors } from "../../../redux/auth";
 import { contactsOperations } from "../../../redux/contacts";
 
-class ContactPageContainer extends Component {
-  static propTypes = {
-    isAuthenticated: PropTypes.string.isRequired,
-    onFetchContacts: PropTypes.func.isRequired,
-  };
+export default function ContactPageContainer() {
+  const isAuthenticated = useSelector(authSelectors.isAuthenticated);
+  const dispatch = useDispatch();
 
-  componentDidMount() {
-    this.props.onFetchContacts();
-  }
+  useEffect(() => {
+    contactsOperations.fetchContacts(dispatch);
+  }, [dispatch]);
 
-  render() {
-    const { isAuthenticated } = this.props;
-
-    return <ContactPage isAuthenticated={isAuthenticated} />;
-  }
+  return <ContactPage isAuthenticated={isAuthenticated} />;
 }
-
-const mapStateToProps = (state) => {
-  return {
-    isAuthenticated: authSelectors.isAuthenticated(state),
-  };
-};
-
-const mapDispatchToProps = {
-  onFetchContacts: contactsOperations.fetchContacts,
-};
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(ContactPageContainer);

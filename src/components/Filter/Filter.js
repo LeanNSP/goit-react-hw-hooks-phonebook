@@ -1,13 +1,18 @@
 import React from "react";
+import { useDispatch } from "react-redux";
 import PropTypes from "prop-types";
 import { CSSTransition } from "react-transition-group";
+
+import { contactsActions } from "../../redux/contacts";
 
 import styles from "./Filter.module.css";
 import "./animationFilter.css";
 
-const Filter = ({ contacts, filter, theme, onChange }) => {
+const Filter = ({ contacts, filter, theme }) => {
   const labelClass = theme === "light" ? styles.label_light : styles.label_dark;
   const inputClass = theme === "light" ? styles.input_light : styles.input_dark;
+
+  const dispatch = useDispatch();
 
   return (
     <CSSTransition
@@ -23,7 +28,9 @@ const Filter = ({ contacts, filter, theme, onChange }) => {
           type="text"
           name="filter"
           value={filter}
-          onChange={({ target }) => onChange(target.value)}
+          onChange={({ target }) =>
+            dispatch(contactsActions.filterInputsChangeHandler(target.value))
+          }
         />
       </label>
     </CSSTransition>
@@ -40,7 +47,6 @@ Filter.propTypes = {
   ).isRequired,
   filter: PropTypes.string.isRequired,
   theme: PropTypes.string.isRequired,
-  onChange: PropTypes.func.isRequired,
 };
 
 export default Filter;
