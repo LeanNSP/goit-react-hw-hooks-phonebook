@@ -4,18 +4,17 @@ import PropTypes from "prop-types";
 
 import { themeActions } from "../../redux/theme";
 
-import styles from "./Switch.module.css";
+import s from "./Switch.module.css";
 
 const Switch = ({ theme }) => {
-  const iconClass = theme === "light" ? styles.icon_light : styles.icon_dark;
-  const labelClass = theme === "light" ? styles.label_light : styles.label_dark;
-  const markerClass =
-    theme === "light" ? styles.marker_light : styles.marker_dark;
+  const iconClass = theme === "light" ? s.icon_light : s.icon_dark;
+  const labelClass = theme === "light" ? s.label_light : s.label_dark;
+  const markerClass = theme === "light" ? s.marker_light : s.marker_dark;
 
   const dispatch = useDispatch();
 
   return (
-    <div className={styles.switch}>
+    <div className={s.switch}>
       <svg className={iconClass} theme={theme} viewBox="0 0 512 512">
         <path
           fill="currentColor"
@@ -24,7 +23,7 @@ const Switch = ({ theme }) => {
       </svg>
 
       <div
-        className={styles.custom_switch}
+        className={s.custom_switch}
         onClick={() => dispatch(themeActions.toggleTheme(theme))}
       >
         <div className={labelClass} theme={theme} />

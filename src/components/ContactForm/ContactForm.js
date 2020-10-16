@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import { CSSTransition } from "react-transition-group";
 
-import styles from "./ContactForm.module.css";
+import s from "./ContactForm.module.css";
 import "./animationContactForm.css";
 
 const ContactForm = ({
@@ -13,13 +13,13 @@ const ContactForm = ({
   onNameChange,
   onNumberChange,
 }) => {
-  const labelClass = theme === "light" ? styles.label_light : styles.label_dark;
-  const inputClass = theme === "light" ? styles.input_light : styles.input_dark;
-  const initBtnClasses = [styles.button];
+  const labelClass = theme === "light" ? s.label_light : s.label_dark;
+  const inputClass = theme === "light" ? s.input_light : s.input_dark;
+  const initBtnClasses = [s.button];
   const btnClasses =
     theme === "light"
-      ? [...initBtnClasses, styles.button_light]
-      : [...initBtnClasses, styles.button_dark];
+      ? [...initBtnClasses, s.button_light]
+      : [...initBtnClasses, s.button_dark];
 
   return (
     <>
@@ -32,7 +32,7 @@ const ContactForm = ({
       >
         {(stage) => {
           return (
-            <form className={styles.form} onSubmit={onSubmit}>
+            <form className={s.form} onSubmit={onSubmit}>
               <label className={labelClass}>
                 Name
                 <input
@@ -57,7 +57,7 @@ const ContactForm = ({
                   value={number}
                   onChange={({ target }) => onNumberChange(target)}
                 />
-                <small className={styles.small}>*Format: 123-45-67</small>
+                <small className={s.small}>*Format: 123-45-67</small>
               </label>
               <CSSTransition
                 in={stage === "entered"}
@@ -73,7 +73,7 @@ const ContactForm = ({
           );
         }}
       </CSSTransition>
-      <div className={styles.border_bottom} />
+      <div className={s.border_bottom} />
     </>
   );
 };

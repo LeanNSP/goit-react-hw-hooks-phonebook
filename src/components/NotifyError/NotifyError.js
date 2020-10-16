@@ -4,11 +4,10 @@ import PropTypes from "prop-types";
 
 import { errorAction } from "../../redux/error";
 
-import styles from "./NotifyError.module.css";
+import s from "./NotifyError.module.css";
 
 const NotifyError = ({ isError, theme }) => {
-  const notifyClass =
-    theme === "light" ? styles.notify_light : styles.notify_dark;
+  const notifyClass = theme === "light" ? s.notify_light : s.notify_dark;
 
   const dispatch = useDispatch();
 
